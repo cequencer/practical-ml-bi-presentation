@@ -24,25 +24,37 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section data-markdown>
-					<script type="text/template">
-						# Practical machine learning for BI applications
-						## Feynman Liang
-						### November 1, 2016
-					</script>
-				</section>
-				<section data-markdown>
-					<script type="text/template">
-						# About Me
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							# Practical machine learning for BI applications
+							## Feynman Liang
+							### November 1, 2016
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# Logistics
 
-						* Currently
-							* PhD in statistics at Berkeley  <!-- .element: class="fragment" -->
-							* Senior ML engineer at Gigster  <!-- .element: class="fragment" -->
-						* Previously  <!-- .element: class="fragment" -->
-							* MPhil in ML from Cambridge (2016)  <!-- .element: class="fragment" -->
-							* Contributor to Apache Spark MLlib (2015-2016)  <!-- .element: class="fragment" -->
-							* Software engineer at Google (2013-2014) and Microsoft (2012-2013)  <!-- .element: class="fragment" -->
-					</script>
+							- Open discussion format
+							- Feel free to interrupt at any time
+							- Downloading the slides / practicals and following along is highly encouraged!
+								- `git clone https://github.com/feynmanliang/practical-ml-bi-presentation`
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# About Me
+
+							* Currently
+								* PhD in statistics at Berkeley  <!-- .element: class="fragment" -->
+								* Senior ML engineer at Gigster  <!-- .element: class="fragment" -->
+							* Previously  <!-- .element: class="fragment" -->
+								* MPhil in ML from Cambridge (2016)  <!-- .element: class="fragment" -->
+								* Contributor to Apache Spark MLlib (2015-2016)  <!-- .element: class="fragment" -->
+								* Software engineer at Google (2013-2014) and Microsoft (2012-2013)  <!-- .element: class="fragment" -->
+						</script>
+					</section>
 				</section>
 				<section>
 					<section data-markdown>
@@ -62,11 +74,11 @@
 							# Non-goals
 
 							- Comprehensive coverage of machine learning field  <!-- .element: class="fragment" -->
-								- Narrowed to common predictive analytics tools which can have immediate impact  <!-- .element: class="fragment" -->
-							- Rigorous mathematical formulations or implementation details  <!-- .element: class="fragment" -->
-								- Focused on motivation and intuition  <!-- .element: class="fragment" -->
+								- Selected topics which can have immediate impact in BI <!-- .element: class="fragment" -->
+							- Rigorous mathematical formulations/implementation details  <!-- .element: class="fragment" -->
+								- Emphasis on motivations and intuitions  <!-- .element: class="fragment" -->
 							- Identification of specific software packages  <!-- .element: class="fragment" -->
-								- Dev environments/processes can differ wildly  <!-- .element: class="fragment" -->
+								- Dev environments/processes differ across comapnies <!-- .element: class="fragment" -->
 								- Fast, scalable implementations freely available for most languages  <!-- .element: class="fragment" -->
 								- Ask me for recommendations for your particular cases  <!-- .element: class="fragment" -->
 						</script>
@@ -82,7 +94,7 @@
 								- (PM) Model evaluation <!-- .element: class="fragment" -->
 								- (PM) Advanced recommendation systems <!-- .element: class="fragment" -->
 								- (PM) Natural language processing <!-- .element: class="fragment" -->
-							- State of the art <!-- .element: class="fragment" -->
+							- Frontiers of current research <!-- .element: class="fragment" -->
 								- (PM) Deep neural networks <!-- .element: class="fragment" -->
 								- (PM) Long short-term memory <!-- .element: class="fragment" -->
 						</script>
@@ -91,12 +103,11 @@
 						<script type="text/template">
 							# We will not be covering
 
-							- Research not yet used in industry
+							- Research not yet adopted by industry
 							- Dimensionality reduction
 							- Reinforcement learning
-							- Large-scale implementations in Spark
 
-							Time permitting, I am happy to lecture about any of the above subjects.
+							Time permitting, I am happy to talk about any of the above subjects.
 						</script>
 					</section>
 				</section>
@@ -230,8 +241,8 @@
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							# Complete supervised ML workflow
-							![Machine learning flowchart](images/crowdflower_ensembling.jpg)
+							## Complete supervised ML workflow
+							<img src="images/crowdflower_ensembling.jpg" height=300>
 
 							*Machine learning flowchart created by the [winner](https://github.com/ChenglongChen/Kaggle_CrowdFlower) of Kaggle's [CrowdFlower competition](https://www.kaggle.com/c/crowdflower-search-relevance)*
 						</script>
@@ -291,7 +302,7 @@
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							# Learning in ML models
+							# Learning models from data
 						</script>
 					</section>
 					<section data-markdown>
@@ -380,7 +391,7 @@
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							# [Recommender systems: predicting movie ratings](http://localhost:8888/notebooks/notebooks/cs-10-recsys.ipynb)
+							# [Advanced recommendation systems: recommending movies](http://localhost:8888/notebooks/notebooks/cs-10-recsys.ipynb)
 						</script>
 					</section>
 					<section data-markdown>
