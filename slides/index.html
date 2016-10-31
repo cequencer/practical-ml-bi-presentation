@@ -1,0 +1,419 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Practical ML for BI applications</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-markdown>
+					<script type="text/template">
+						# Practical machine learning for BI applications
+						## Feynman Liang
+						### November 1, 2016
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						# About Me
+
+						* Currently
+							* PhD in statistics at Berkeley  <!-- .element: class="fragment" -->
+							* Senior ML engineer at Gigster  <!-- .element: class="fragment" -->
+						* Previously  <!-- .element: class="fragment" -->
+							* MPhil in ML from Cambridge (2016)  <!-- .element: class="fragment" -->
+							* Contributor to Apache Spark MLlib (2015-2016)  <!-- .element: class="fragment" -->
+							* Software engineer at Google (2013-2014) and Microsoft (2012-2013)  <!-- .element: class="fragment" -->
+					</script>
+				</section>
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							# Goals for today
+
+							- Introduce fundamental concepts for understanding, using, and evaluating machine learning tools <!-- .element: class="fragment" -->
+							- Broad overview of techniques in use at many SF bay area companies <!-- .element: class="fragment" -->
+							- Detailed coverage of topics relevant to business intelligence and predictive analytics <!-- .element: class="fragment" -->
+								- Several different application domains (relational data, natural language, images, music) <!-- .element: class="fragment" -->
+								- Lots of practicals demonstrating how to use these tools <!-- .element: class="fragment" -->
+							- Touch on current state of the art in ML research  <!-- .element: class="fragment" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# Non-goals
+
+							- Comprehensive coverage of machine learning field  <!-- .element: class="fragment" -->
+								- Narrowed to common predictive analytics tools which can have immediate impact  <!-- .element: class="fragment" -->
+							- Rigorous mathematical formulations or implementation details  <!-- .element: class="fragment" -->
+								- Focused on motivation and intuition  <!-- .element: class="fragment" -->
+							- Identification of specific software packages  <!-- .element: class="fragment" -->
+								- Dev environments/processes can differ wildly  <!-- .element: class="fragment" -->
+								- Fast, scalable implementations freely available for most languages  <!-- .element: class="fragment" -->
+								- Ask me for recommendations for your particular cases  <!-- .element: class="fragment" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# Tentative agenda
+
+							- (AM): Machine learning fundamentals <!-- .element: class="fragment" -->
+							- Practicals  <!-- .element: class="fragment" -->
+								- (AM) Regression <!-- .element: class="fragment" -->
+								- (AM) Classification <!-- .element: class="fragment" -->
+								- (PM) Model evaluation <!-- .element: class="fragment" -->
+								- (PM) Advanced recommendation systems <!-- .element: class="fragment" -->
+								- (PM) Natural language processing <!-- .element: class="fragment" -->
+							- State of the art <!-- .element: class="fragment" -->
+								- (PM) Deep neural networks <!-- .element: class="fragment" -->
+								- (PM) Long short-term memory <!-- .element: class="fragment" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# We will not be covering
+
+							- Research not yet used in industry
+							- Dimensionality reduction
+							- Reinforcement learning
+							- Large-scale implementations in Spark
+
+							Time permitting, I am happy to lecture about any of the above subjects.
+						</script>
+					</section>
+				</section>
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							# Machine learning fundamentals
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# *Question*: What is machine learning?
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							<img src="images/what-is-ml-0.png">
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							<img src="images/what-is-ml-1.png">
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							One definition: “Machine learning is the semi-automatic extraction of knowledge from data.”
+
+							- **Knowledge from data**: Starts with a question that might be answerable using data
+							- **Automatic extraction**: A computer provides the insight
+							- **Semi-automatic**: Requires many smart decisions by a human
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# Supervised learning
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							There are two main categories of machine learning: **supervised learning** and **unsupervised learning**.
+
+							**Supervised learning** (aka “predictive modeling”):
+							- Predict an outcome based on input data
+							- Example: predict whether an email is spam or ham
+							- Goal is “generalization”
+
+							We will mainly focus on supervised learning today.
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Example: Predict salary using demographic data
+
+							<img src="images/typical-supervised.png">
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Example: Classify handwritten numbers
+
+							<img src="images/typical-supervised-2.png" height=500>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Two categories of supervised learning
+
+							### Regression
+							- Outcome we are trying to predict is continuous
+							- Examples: price, blood pressure
+
+							### Classification
+							- Outcome we are trying to predict is categorical (values in a finite set)
+							- Examples: spam/ham, cancer class of tissue sample
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							<img src="images/sick-baby.png" height=100px>
+
+							- **Problem**: Children born prematurely are at high risk
+							of developing infections, many of which are not
+							detected until after the baby is sick
+
+							- **Goal**: Detect subtle patterns in the data that
+							predicts infection before it occurs
+
+							- **Data**: 16 vital signs such as heart rate, respiration rate, blood pressure, etc...
+
+							- **Impact**: Model is able to predict the onset of
+							infection 24 hours before the traditional symptoms
+							of infection appear
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							<img src="images/netflix.png" height=500>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							<img src="images/iris.png" height=500>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Terminology
+							- **Observations** are also known as: samples, examples, instances,
+							records
+							- **Features** are also known as: predictors, independent variables,
+							inputs, regressors, covariates, attributes
+							- **Response** is also known as: outcome, label, target, dependent
+							variable
+							- **Regression** problems have a continuous response. **Classification**
+							problems have a categorical response. The type of supervised
+							learning problem has nothing to do with the features!
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## How does supervised learning "work"?
+
+							<img src="images/supervised-diagram.png" height=500>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## [Supervised <s>machine</s> human learning](http://localhost:8888/notebooks/notebooks/cs-1-iris.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# Complete supervised ML workflow
+							![Machine learning flowchart](images/crowdflower_ensembling.jpg)
+
+							*Machine learning flowchart created by the [winner](https://github.com/ChenglongChen/Kaggle_CrowdFlower) of Kaggle's [CrowdFlower competition](https://www.kaggle.com/c/crowdflower-search-relevance)*
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# Unsupervised learning
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							There are two main categories of machine learning: **supervised learning** and **unsupervised learning**.
+
+							Unsupervised learning:
+							- Extracting structure from data
+							- Example: segment grocery store shoppers into "clusters" that exhibit similar behaviors
+							- Goal is "representation"
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							Group US residential neighborhoods into 67 unique segments based on demographic and socioeconomic characteristics
+
+							<img src="images/unsup-example.png">
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Common types of unsupervised learning
+							- **Clustering**: group "similar" data points together
+							- **Dimensionality Reduction**: reduce the dimensionality of a
+							dataset by extracting features that capture most of the variance in
+							the data
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Differences from supervised learning
+							With **unsupervised learning**:
+							 - There is no clear objective
+							 - There is no "right answer" (hard to tell how well you are doing)
+							 - There is no response variable, just observations with features
+							 - Labeled data is not required
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Example: supervised learning
+							<img src="images/sup-coin.png">
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Example: unsupervised learning
+							<img src="images/unsup-coin.png" height=500>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# Learning in ML models
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Utility/Loss function
+							* The "goodness" of a model is measured by a **utility function** (to be maximized) or a **loss function** (to be minimized)
+							* Learning = optimizing a good model to minimize loss / maximize utility
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Mean squared error (MSE)
+							Utility or loss?
+
+							<img src="images/residuals.png" height=500>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Area under ROC (AUROC)
+							Utility or loss?
+
+							<img src="images/auroc.png" height=500>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Gradient descent optimization
+							<img src="images/gradient_descent.png" height=500>
+						</script>
+					</section>
+				</section>
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							# Practicals
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Goals
+							- Give a broad coverage of various machine learning techniques
+							- Demonstrate how to use these tools to solve some real-world problems
+							- Provide hands-on experience dealing with practicalities in building an end-to-end ML project
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## [Our first ML model: k-nearest neighbors](http://localhost:8888/notebooks/notebooks/cs-2-knn-classifier.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# [Case study: predicting NBA salaries](http://localhost:8888/notebooks/notebooks/cs-3-knn-nba.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# [Evaluating models and overfitting](http://localhost:8888/notebooks/notebooks/cs-4-evaluation.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# [Modelling bikeshare demand with linear regression](http://localhost:8888/notebooks/notebooks/cs-5-linear-regression.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# [Classifying glass type from spectrometer data with logistic regression](http://localhost:8888/notebooks/notebooks/cs-6-logistic-regression.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# [Case study: predicting Titanic survivors](http://localhost:8888/notebooks/notebooks/cs-7-logreg-titanic.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# [Modelling baseball salaries with decision trees and random forests](http://localhost:8888/notebooks/notebooks/cs-8-decision-trees.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# [Natural language processing: analyzing Yelp reviews](http://localhost:8888/notebooks/notebooks/cs-9-nlp.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# [Recommender systems: predicting movie ratings](http://localhost:8888/notebooks/notebooks/cs-10-recsys.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# [Image recognition with convolutional neural networks](http://localhost:8888/notebooks/notebooks/cs-11-cnn-mnist.ipynb)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							# [Composing Bach chorales with LSTM](http://feynmanliang.github.io/bachbot-future-decoded)
+						</script>
+					</section>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
